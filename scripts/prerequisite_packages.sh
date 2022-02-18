@@ -4,6 +4,8 @@ set -e
 
 #Enter kubernetes version
 v='1.21.1-00'
+#Golang version
+GO_VERSION=${GO_VERSION:-"1.14.15"}
 
 ip_tables(){
    echo -e "## LETTING IPTABLES SEE BRIDGED TRAFFIC"
@@ -65,17 +67,17 @@ kube_cluster(){
 }
 
 golang_tools(){
-   if [ "$(go version)" != "go version go1.14.15 linux/amd64" ] > /dev/null 2>&1
+   if [ "$(go version)" != "go version go${GO_VERSION} linux/amd64" ] > /dev/null 2>&1
     then
        echo -e "## INSTALLING GOLANG TOOLS FOR CLOUDCORE AND EDGECORE"
        sudo apt -y install make gcc jq > /dev/null 2>&1
-       wget https://dl.google.com/go/go1.14.15.linux-amd64.tar.gz -P /tmp
-       tar -C /usr/local -xzf /tmp/go1.14.15.linux-amd64.tar.gz
+       wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz -P /tmp
+       sudo tar -C /usr/local -xzf /tmp/go${GO_VERSION}.linux-amd64.tar.gz
        echo -e 'export PATH=$PATH:/usr/local/go/bin\nexport GOPATH=/usr/local/go/bin\nexport KUBECONFIG=/etc/kubernetes/admin.conf' |cat >> ~/.bashrc
        source $HOME/.bashrc
        sudo cp /usr/local/go/bin/go /usr/local/bin
        echo -e "## DONE\n"
     else
-       echo -e "## go1.14.15 already installed\n "
+       echo -e "## go${GO_VERSION} already installed\n "
    fi
 }
