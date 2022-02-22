@@ -57,7 +57,7 @@ kube_cluster(){
       export KUBECONFIG=/etc/kubernetes/admin.conf
       export kubever=$(kubectl version | base64 | tr -d '\n') 
       kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
-      sleep 5s
+      sleep 6s
       kubectl get nodes
    else
       export KUBECONFIG=/etc/kubernetes/admin.conf
